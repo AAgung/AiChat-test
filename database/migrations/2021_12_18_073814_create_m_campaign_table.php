@@ -16,7 +16,7 @@ class CreateMCampaignTable extends Migration
         Schema::create('m_campaign', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->unique();
-            $table->string('slug', 100)->unique()->comment('Slug is gonna be used for campaign link');
+            $table->string('slug', 100)->unique()->comment('Slug is gonna be used in campaign link');
             $table->timestamp('start_at')->nullable()->index();
             $table->timestamp('end_at')->nullable()->index();
             $table->timestamps();

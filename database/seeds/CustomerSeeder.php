@@ -18,5 +18,11 @@ class CustomerSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         factory(Customer::class, 10)->create();
+
+        // Update email for test purposes only
+        Customer::where('id', 1)
+            ->update([
+                'email' => 'test@aichat.id'
+            ]);
     }
 }

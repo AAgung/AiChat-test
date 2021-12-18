@@ -22,7 +22,7 @@ class CampaignSeeder extends Seeder
         $campaign = Campaign::create([
             'name' => 'Campaign A',
             'slug' => Str::slug('Campaign A'),
-            'start_at' => $faker->dateTime(),
+            'start_at' => $faker->dateTimeBetween('0 day', '0 day'),
             'end_at' => $faker->dateTimeBetween('+2 weeks', '+1 month')
         ]);
     }

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('customer')->group(function() {
+    Route::get('check-eligible-campaign-voucher', 'Api\v1\CustomerController@checkEligibleCampaignVoucher');
 });
