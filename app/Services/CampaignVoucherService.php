@@ -36,7 +36,7 @@ class CampaignVoucherService
 
         return [
             'success' => true,
-            'data' => [],
+            'data' => ['lockdown_expired_at' => Carbon::now()->addMinutes(10)->isoFormat('Y-MM-D HH:mm:ss')],
             'message' => 'Voucher has been locked down'
         ];
     }
@@ -60,6 +60,36 @@ class CampaignVoucherService
                 'lockdown_at' => null,
                 'lockdown_expired_at' => null,
             ]);
+    }
+
+    /**
+     * qualify photo submission
+     * 
+     * @param int $campaignId
+     * @param int $customerId
+     * @param bool $qualify
+     * @return array
+     */
+    public function qualifyPhotoSubmission($campaignId = 0, $customerId = 0, $qualify = true)
+    {
+        $campaignVoucher = CampaignVoucher::where('campaign_id', $campaignId)
+            ->where('customer_id', $customerId)
+            ->where('is_qualified', 0)
+            ->WhereRaw('UNIX_TIMESTAMP(NOW()) <= UNIX_TIMESTAMP(lockdown_expired_at)')
+            ->first();
+        if($campaignVoucher) {
+            $campaignVoucher->customer_id = $qualify ? $customerId : null;
+            $campaignVoucher->lockdown_at = $qualify ? $campaignVoucher->lockdown_at : null;
+            $campaignVoucher->lockdown_expired_at = null;
+            $campaignVoucher->is_qualified = $qualify;
+            $campaignVoucher->save();
+        }
+
+        return [
+            'success' => $qualify && $campaignVoucher ? true : false,
+            'data' => $qualify && $campaignVoucher ? ['code' => $campaignVoucher->code] : [],
+            'message' => $qualify && $campaignVoucher ? 'Voucher has been acquired' : 'Voucher not acquired',
+        ];
     }
 
     /**
@@ -94,7 +124,7 @@ class CampaignVoucherService
                 : ['code' => $campaignVoucher->code],
             'message' => $campaignVoucher->lockdown_expired_at 
                 ? 'Customer still have active voucher that not qualified by uploaded photo yet' 
-                : 'Customer has been get voucher',
+                : 'Congrats, Customer has been got the voucher',
         ];
     }
 }

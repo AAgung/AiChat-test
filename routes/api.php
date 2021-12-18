@@ -15,4 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 Route::prefix('customer')->group(function() {
     Route::get('check-eligible-campaign-voucher', 'Api\v1\CustomerController@checkEligibleCampaignVoucher');
+    Route::post('validate-photo-submission', 'Api\v1\CustomerController@validatePhotoSubmission');
 });
