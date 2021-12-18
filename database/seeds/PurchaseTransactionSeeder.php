@@ -27,37 +27,37 @@ class PurchaseTransactionSeeder extends Seeder
                 'customer_id' => 1,
                 'total_spent' => 45,
                 'total_saving' => 0,
-                'transaction_at' => $faker->dateTimeBetween('-3 months', '-1 day'),
+                'transaction_at' => $faker->dateTimeBetween('-30 days', '-1 day'),
             ],
             [
                 'customer_id' => 1,
                 'total_spent' => 33.5,
                 'total_saving' => 0,
-                'transaction_at' => $faker->dateTimeBetween('-3 months', '-1 day'),
+                'transaction_at' => $faker->dateTimeBetween('-30 days', '-1 day'),
             ],
             [
                 'customer_id' => 1,
                 'total_spent' => 50,
                 'total_saving' => 0,
-                'transaction_at' => $faker->dateTimeBetween('-3 months', '-1 day'),
+                'transaction_at' => $faker->dateTimeBetween('-30 days', '-1 day'),
             ],
             [
                 'customer_id' => 2,
                 'total_spent' => 25,
                 'total_saving' => 0,
-                'transaction_at' => $faker->dateTimeBetween('-3 months', '-1 day'),
+                'transaction_at' => $faker->dateTimeBetween('-30 days', '-1 day'),
             ],
             [
                 'customer_id' => 2,
                 'total_spent' => 33.5,
                 'total_saving' => 0,
-                'transaction_at' => $faker->dateTimeBetween('-3 months', '-1 day'),
+                'transaction_at' => $faker->dateTimeBetween('-30 days', '-1 day'),
             ],
             [
                 'customer_id' => 2,
                 'total_spent' => 99,
                 'total_saving' => 0,
-                'transaction_at' => $faker->dateTimeBetween('-3 months', '-1 day'),
+                'transaction_at' => $faker->dateTimeBetween('-30 days', '-1 day'),
             ],
         ]);
     }

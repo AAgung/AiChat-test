@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Api\v1\BaseController;
 use App\Models\master\Campaign;
 use App\Models\master\Customer;
+use App\Models\PurchaseTransaction;
 use App\Services\CampaignService;
 use App\Services\CampaignVoucherService;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 
@@ -42,7 +44,16 @@ class CustomerController extends BaseController
         if(!$customerEmail) return $this->sendError('Customer email not found', [], 400);
 
         // check data customer is exists filtered by customer_email
-        $customer = Customer::select('id')->where('email', $customerEmail)->first();
+        // and get total last 30 days transactions & total spent all transactions
+        $last30days = Carbon::now()->subDays(30)->isoFormat('Y-MM-D HH:mm:ss');
+        $aSelect = [
+            'id',
+            '(SELECT COUNT(id) FROM '.with(new PurchaseTransaction)->getTable().' WHERE customer_id = '.with(new Customer)->getTable().'.id AND UNIX_TIMESTAMP(transaction_at) BETWEEN UNIX_TIMESTAMP("'.$last30days.'") AND UNIX_TIMESTAMP(NOW())) AS last_30_days_purchase_total',
+            '(SELECT SUM(total_spent) FROM '.with(new PurchaseTransaction)->getTable().' WHERE customer_id = '.with(new Customer)->getTable().'.id) AS purchase_spent_all_total'
+        ];
+        $customer = Customer::selectRaw(implode(', ', $aSelect))
+            ->where('email', $customerEmail)
+            ->first();
         if(!$customer) return $this->sendError('Customer data not found', [], 400);
 
         DB::beginTransaction();
@@ -69,6 +80,17 @@ class CustomerController extends BaseController
                 );
             }
     
+            if($customer->last_30_days_purchase_total < 3 
+            && $customer->purchase_spent_all_total < 100) {
+                return $this->sendError(
+                    'Customer are not eligible to participate this campaign', 
+                    [
+                        'last_30_days_purchase_total' => $customer->last_30_days_purchase_total,
+                        'purchase_spent_all_total' => $customer->purchase_spent_all_total,
+                    ], 
+                    isset($campaignAccessable['code']) ? $campaignAccessable['code'] : 400
+                );
+            }
             // set locked down campaign voucher to selected customer
             $campaignVoucher = $this->campaignVoucherService->setLockDownToCustomer($customer->id, $campaignAccessable['data']->id);
 
