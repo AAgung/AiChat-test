@@ -81,7 +81,7 @@ class CustomerController extends BaseController
             }
     
             if($customer->last_30_days_purchase_total < 3 
-            && $customer->purchase_spent_all_total < 100) {
+            || $customer->purchase_spent_all_total < 100) {
                 return $this->sendError(
                     'Customer are not eligible to participate this campaign', 
                     [
