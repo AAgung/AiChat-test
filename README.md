@@ -1,61 +1,61 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# AiChat Test
+API to be consume by front development to give away voucher based on selected active campaign.
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+# Disclaimer
+- Build on PHP v. 7.2 
+- Laravel v. 7.29
 
-## About Laravel
+# Installation for local development environment
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. Open Terminal / CMD / Git Bash
+2. Clone this repository to your local development environemnt
+3. Open project folder root
+4. type 'composer install'
+5. copy file '.env.example' to '.env' and setting the configuration 
+    - APP_TIMEZONE: your timezone
+    - DB_DATABASE: your database name
+    - DB_USERNAME: your database username
+    - DB_PASSWORD: your database password
+6. type 'php artisan migrate:fresh --seed' on Terminal / CMD / Git Bash on project folder root
+7. type 'php artisan serve' on Terminal / CMD / Git Bash on project folder root to start server
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# API Documentation using Postman
+Link: https://documenter.getpostman.com/view/3619632/UVRAJ6yP#04a57bab-77cb-40cc-a827-37470de1b0d9
+File: AiChat-test.postman_collection.json
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Using file
+1. you must install Postman first
+2. import file 'AiChat-test.postman_collection.json' to your postman collection
+3. change 'base_url' variable on your setting Variables Collection (default: http://localhost:8000/api)
 
-## Learning Laravel
+## Steps to execute
+### API Customer Eligible Check
+1. open request 'customer/check-eligible-campaign-voucher'
+2. input request parameter
+    - customer_email: 
+    test@aichat.id & customer email with id = 2 (default) is eligible, you can check another customer on table in database to check eligible or not
+    - campaign_slug: campaign-a (don't change, because this is from seeder)
+3. Send request, condition:
+    - if campaign not accessable, it will return response with message "Campaign Not Found"
+    - if customer does not have voucher active (locked down or qualified after upload photo), the request will make locked down voucher for selected customer
+    - if customer does have voucher active (locked down or qualified after upload photo), it will return the voucher data (locked down = expired time, qualified = code)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### API Validation Photo Submission
+1. open request 'customer/validate-photo-submission'
+2. input request parameter
+    - customer_email: eligible customer email
+    - campaign_slug: campaign-a (don't change, because this is from seeder)
+3. Send request, condition:
+    - if customer send request without check eligble , it will return response with message "Voucher Not Acquired"
+    - if customer send request exceeds 10 minutes, it will return response with message "Voucher Not Acquired"
+    - if customer have voucher active or has send this request , it will return the voucher code
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+# Packages & Library
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+All packages that used comes from the laravel framework, such as:
+    - fideloper/proxy
+    - fruitcake/laravel-cors
+    - guzzlehttp/guzzle
+    - etc
+list packages can be seen on file 'composer.json'
