@@ -30,6 +30,7 @@ class CampaignService
                 'success' => false,
                 'message' => 'Campaign data not found',
                 'data' => [],
+                'code' => 404
             ]; 
         }
 

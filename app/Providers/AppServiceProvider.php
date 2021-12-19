@@ -28,12 +28,14 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        DB::listen(function ($query) {
-            Log::info([
-                $query->sql,
-                $query->bindings,
-                $query->time
-            ]);
-        });
+        if(!$this->app->environment('production')) {
+            DB::listen(function ($query) {
+                Log::info([
+                    $query->sql,
+                    $query->bindings,
+                    $query->time
+                ]);
+            });
+        }
     }
 }

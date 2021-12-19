@@ -37,7 +37,7 @@ class CustomerController extends BaseController
 
         // check data campaign is exists filtered by campaign_slug
         $campaign = Campaign::select('id')->where('slug', $campaignSlug)->first();
-        if(!$campaign) return $this->sendError('Campaign data not found', [], 400);
+        if(!$campaign) return $this->sendError('Campaign data not found', [], 404);
 
         // check request param customer_email is filled
         $customerEmail = $request->customer_email ?? '';
@@ -54,7 +54,7 @@ class CustomerController extends BaseController
         $customer = Customer::selectRaw(implode(', ', $aSelect))
             ->where('email', $customerEmail)
             ->first();
-        if(!$customer) return $this->sendError('Customer data not found', [], 400);
+        if(!$customer) return $this->sendError('Customer data not found', [], 404);
 
         DB::beginTransaction();
         try {
@@ -121,7 +121,7 @@ class CustomerController extends BaseController
             
             // check data campaign is exists filtered by campaign_slug
             $campaign = Campaign::select('id')->where('slug', $campaignSlug)->first();
-            if(!$campaign) return $this->sendError('Campaign data not found', [], 400);
+            if(!$campaign) return $this->sendError('Campaign data not found', [], 404);
             
             // check request param customer_email is filled
             $customerEmail = $request->customer_email ?? '';
@@ -129,7 +129,7 @@ class CustomerController extends BaseController
             
             // check data customer is exists filtered by customer_email
             $customer = Customer::select('id')->where('email', $customerEmail)->first();
-            if(!$customer) return $this->sendError('Customer data not found', [], 400);
+            if(!$customer) return $this->sendError('Customer data not found', [], 404);
 
             // validate file
             $validateFile = $request->validate_file ?? true;   

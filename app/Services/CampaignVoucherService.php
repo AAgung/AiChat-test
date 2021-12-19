@@ -113,7 +113,8 @@ class CampaignVoucherService
             return [
                 'success' => true,
                 'data' => [],
-                'message' => 'Voucher not found'
+                'message' => 'Voucher not found',
+                'code' => 404,
             ];
         }
 
