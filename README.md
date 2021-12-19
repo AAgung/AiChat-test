@@ -48,6 +48,7 @@ File: AiChat-test.postman_collection.json
 2. input request parameter
     - customer_email: eligible customer email
     - campaign_slug: campaign-a (don't change, because this is from seeder)
+    - validate_file: true or false (default true), you can change the value to true or false
 3. Send request, condition:
     - if customer send request without check eligble , it will return response with message "Voucher Not Acquired"
     - if customer send request exceeds 10 minutes, it will return response with message "Voucher Not Acquired"
