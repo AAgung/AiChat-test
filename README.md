@@ -39,6 +39,9 @@ File: AiChat-test.postman_collection.json
     - if campaign not accessable, it will return response with message "Campaign Not Found"
     - if customer does not have voucher active (locked down or qualified after upload photo), the request will make locked down voucher for selected customer
     - if customer does have voucher active (locked down or qualified after upload photo), it will return the voucher data (locked down = expired time, qualified = code)
+- note:
+    - You can change field 'end_at' in table 'm_campaign' in database to check is campaign is active or not
+
 
 ### API Validation Photo Submission
 1. open request 'customer/validate-photo-submission'
